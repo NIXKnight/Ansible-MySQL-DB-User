@@ -1,0 +1,32 @@
+---
+# tasks file for Ansible-MySQL-DB-User
+- name: Install Prerequisites
+  apt:
+    pkg: "{{ MYSQL_PYTHON_PACKAGE }}"
+    update_cache: yes
+    state: present
+
+- name: Create MySQL Database(s)
+  mysql_db:
+    login_host:  "{{ MYSQL_LOGIN_ENDPOINT }}"
+    login_port: "{{ MYSQL_PORT }}"
+    login_user: "{{ MYSQL_LOGIN_USERNAME }}"
+    login_password: "{{ MYSQL_LOGIN_PASSWORD }}"
+    name: "{{ item.database }}"
+    state: present
+  when: (item.database != None and item.database != '') or (item is not defined)
+  with_items: "{{ MYSQL_DATABASES }}"
+
+- name: Create MySQL User(s)
+  mysql_user:
+    login_host:  "{{ MYSQL_LOGIN_ENDPOINT }}"
+    login_port: "{{ MYSQL_PORT }}"
+    login_user: "{{ MYSQL_LOGIN_USERNAME }}"
+    login_password: "{{ MYSQL_LOGIN_PASSWORD }}"
+    name: "{{ item.username }}"
+    password: "{{ item.password }}"
+    priv: "{{ item.database }}.*:ALL"
+    append_privs: yes
+    host: "%"
+  when: (item.database != None and item.database != '') or (item is not defined)
+  with_items: "{{ MYSQL_DATABASES }}"

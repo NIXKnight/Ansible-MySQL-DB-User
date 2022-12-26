@@ -1,0 +1,8 @@
+---
+# defaults file for Ansible-MySQL-DB-User
+MYSQL_PYTHON_PACKAGE: "python3-mysqldb"
+MYSQL_LOGIN_ENDPOINT: ""
+MYSQL_PORT: "3306"
+MYSQL_LOGIN_USERNAME: ""
+MYSQL_LOGIN_PASSWORD: ""
+MYSQL_DATABASES: []
